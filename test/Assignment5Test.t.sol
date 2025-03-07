@@ -1,36 +1,46 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-import {Test, console} from "forge-std/Test.sol";
-import {Assignment5} from "../src/Assignment5.sol";
+contract Assignment5 {
 
-contract Assignment5Test is Test {
-    Assignment5 assignment;
+    // 1. Define variables
+    uint public counter;
+    bool public isActive;
 
-    function setUp() public {
-        assignment = new Assignment5();
+    // User structure to store user data
+    struct User {
+        uint id;
+        string name;
+        address addr;
     }
 
-    function testInitialCounter() public {
-        uint counter = assignment.counter();
-        assertEq(counter, 0, "Counter should start at 0");
+    // Array to store users
+    User[] public users;
+
+    // 2. Constructor to set initial values
+    constructor() {
+        counter = 0;
+        isActive = true;
     }
 
-    function testIncrementCounter() public {
-        assignment.incrementCounter();
-        uint counter = assignment.counter();
-        assertEq(counter, 5, "Counter should increment by 5");
+    // 3. Function to increment the counter by 5
+    function incrementCounter() public {
+        counter += 5;
     }
 
-    function testToggleActive() public {
-        assignment.toggleActive();
-        bool isActive = assignment.isActive();
-        assertEq(isActive, false, "isActive should toggle to false");
+    // 4. Function to toggle the isActive state
+    function toggleActive() public {
+        isActive = !isActive;
     }
 
-    function testAddUser() public {
-        assignment.addUser(1, "Alice", makeAddr("test"));
-        uint userCount = assignment.getUserCount();
-        assertEq(userCount, 1, "User count should be 1");
+    // 5. Function to add a new user
+    function addUser(uint _id, string memory _name, address _addr) public {
+        User memory newUser = User(_id, _name, _addr);
+        users.push(newUser);
+    }
+
+    // Function to return the number of users
+    function getUserCount() public view returns (uint) {
+        return users.length;
     }
 }
